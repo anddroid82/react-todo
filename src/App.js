@@ -1,5 +1,6 @@
 import Todolist from "./Todolist";
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
+import Bloglist from "./Bloglist";
 
 let todoList = [
   {id:1,title:"todo1",complete:false},
@@ -8,6 +9,17 @@ let todoList = [
 ];
 
 function App() {
+  const download = async () => {
+    let x = await fetch('https://jsonplaceholder.typicode.com/posts');
+    let y = await x.text();
+    setPosts(JSON.parse(y));
+  }
+  useEffect( () => {
+    download();
+  },[]);
+
+  const [posts,setPosts] = useState([]);
+
   const [todos,setTodos] = useState(todoList);
   function completed(id) {
     console.log(id);
@@ -20,6 +32,7 @@ function App() {
   return (
     <div className="App">
       <Todolist todos={todos} complete={completed} />
+      <Bloglist posts={posts} />
     </div>
   );
 }
